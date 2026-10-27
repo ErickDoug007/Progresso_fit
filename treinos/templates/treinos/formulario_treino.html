@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Montar meu treino — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'treinos/css/treinos.css' %}">{% endblock %}
+{% block nav_treino %}active{% endblock %}
+
+{% block content %}
+<div>
+  <h1 class="form-title" style="margin-left: 80px;">Vamos montar <span>seu treino</span></h1>
+</div>
+
+<main>
+  {% if form.errors %}
+    <div style="background:#3a1a1a; border-left:3px solid #E85C5C; padding:14px 20px; margin-bottom:24px; border-radius:6px;">
+      <strong>Corrija os campos abaixo:</strong>
+      <ul style="margin:8px 0 0 18px;">
+        {% for campo in form %}
+          {% for erro in campo.errors %}
+            <li>{{ campo.label }}: {{ erro }}</li>
+          {% endfor %}
+        {% endfor %}
+        {% for erro in form.non_field_errors %}
+          <li>{{ erro }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid">
+      <div class="card">
+        <h3>Experiência e objetivo</h3>
+        <div class="field"><label>{{ form.status.label }}</label>{{ form.status }}</div>
+        <div class="field"><label>{{ form.objetivo.label }}</label>{{ form.objetivo }}</div>
+        <div class="field"><label>{{ form.tempo_minutos.label }}</label>{{ form.tempo_minutos }}</div>
+      </div>
+
+      <div class="card">
+        <h3>Dias disponíveis</h3>
+        <div class="field dias-checkbox">{{ form.dias }}</div>
+      </div>
+
+      <div class="card">
+        <h3>Linha de base atual</h3>
+        <div class="field"><label>{{ form.exercicios_atuais.label }}</label>{{ form.exercicios_atuais }}</div>
+        <div class="field"><label>{{ form.cargas_atuais.label }}</label>{{ form.cargas_atuais }}</div>
+        <div class="field"><label>{{ form.series_repeticoes_atual.label }}</label>{{ form.series_repeticoes_atual }}</div>
+      </div>
+
+      <div class="card">
+        <h3>Observações</h3>
+        <div class="field"><label>{{ form.observacoes.label }}</label>{{ form.observacoes }}</div>
+      </div>
+    </div>
+
+    <div class="save-bar">
+      <button type="submit" class="btn btn-primary">Gerar meu treino</button>
+    </div>
+  </form>
+</main>
+{% endblock %}

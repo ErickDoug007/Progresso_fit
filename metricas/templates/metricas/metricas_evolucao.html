@@ -1,0 +1,151 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Evolução Corporal — ProgressoFit{% endblock %}
+
+{% block extra_css %}
+<script src="{% static 'metricas/js/vendor/chart.umd.js' %}"></script>
+<link rel="stylesheet" href="{% static 'metricas/css/metricas.css' %}">
+{% endblock %}
+
+{% block content %}
+<header>
+  <div>
+    <h1>Sua <span>Evolução</span> Corporal</h1>
+    <p>Histórico de medições e progresso ao longo do tempo</p>
+  </div>
+  <div class="highlight" style="min-width:140px;">
+    <div class="v">{% if historico %}{{ historico.0.imc|default:"--" }}{% else %}--{% endif %}</div>
+    <div class="l">IMC atual</div>
+  </div>
+</header>
+
+<main>
+
+  <div class="highlight-strip">
+    <div class="highlight">
+      <div class="v">{% if historico %}{{ historico.0.peso }}{% else %}--{% endif %}</div>
+      <div class="l">Peso atual (kg)</div>
+    </div>
+    <div class="highlight">
+      <div class="v">{% if historico %}{{ historico.0.percentual_gordura|default:"--" }}{% else %}--{% endif %}</div>
+      <div class="l">% Gordura</div>
+    </div>
+    <div class="highlight">
+      <div class="v">{% if historico %}{{ historico.0.massa_magra|default:"--" }}{% else %}--{% endif %}</div>
+      <div class="l">Massa Magra (kg)</div>
+    </div>
+    <div class="highlight">
+      <div class="v">{% if historico %}{{ historico.0.get_nivel_display|default:"--" }}{% else %}--{% endif %}</div>
+      <div class="l">Nível</div>
+    </div>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card">
+      <h3>Mudança de Peso (kg)</h3>
+      <canvas id="chartPeso"></canvas>
+    </div>
+    <div class="chart-card">
+      <h3>Mudança da % de Gordura</h3>
+      <canvas id="chartGordura"></canvas>
+    </div>
+  </div>
+
+  <div class="save-bar" style="justify-content:flex-start; margin-bottom:12px;">
+    <a href="{% url 'metricas:metricas' %}" class="btn btn-primary" style="text-decoration:none; display:inline-block;">
+      + Adicionar nova medição
+    </a>
+    <a href='{% url "contas:perfil" %}' class="btn btn-outline" style="text-decoration: none;">
+      Voltar
+    </a>
+  </div>
+
+  <div class="card" style="padding:0; overflow-x:auto; margin-bottom:28px;">
+    <table>
+      <thead>
+        <tr>
+          <th>Data</th><th>Peso (kg)</th><th>% Gordura</th><th>Cintura (cm)</th><th>IMC</th><th>Nível</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for medicao in historico %}
+        <tr class="row-principal" data-target="detalhe-{{ medicao.id }}">
+          <td>{{ medicao.data_medicao|date:"d/m/Y" }}</td>
+          <td>{{ medicao.peso }}</td>
+          <td>{{ medicao.percentual_gordura|default:"—" }}</td>
+          <td>{{ medicao.cintura|default:"—" }}</td>
+          <td>{{ medicao.imc|default:"—" }}</td>
+          <td>{{ medicao.get_nivel_display|default:"—" }}</td>
+          <td><button type="button" class="btn btn-outline btn-expandir">Ver mais ▾</button></td>
+        </tr>
+        <tr class="row-detalhe" id="detalhe-{{ medicao.id }}" style="display:none;">
+          <td colspan="7">
+            <div class="detalhe-wrap">
+
+              <table class="mini-table">
+                <thead>
+                  <tr><th>Braço</th><th>Direito</th><th>Esquerdo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Contraído</td><td>{{ medicao.braco_dir_contraido|default:"—" }}</td><td>{{ medicao.braco_esq_contraido|default:"—" }}</td></tr>
+                  <tr><td>Relaxado</td><td>{{ medicao.braco_dir_relaxado|default:"—" }}</td><td>{{ medicao.braco_esq_relaxado|default:"—" }}</td></tr>
+                </tbody>
+              </table>
+
+              <table class="mini-table">
+                <thead>
+                  <tr><th>Antebraço</th><th>Direito</th><th>Esquerdo</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>—</td><td>{{ medicao.antebraco_dir|default:"—" }}</td><td>{{ medicao.antebraco_esq|default:"—" }}</td></tr>
+                </tbody>
+              </table>
+
+              <table class="mini-table">
+                <thead>
+                  <tr><th>Coxa</th><th>Direita</th><th>Esquerda</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Alta</td><td>{{ medicao.coxa_dir_alta|default:"—" }}</td><td>{{ medicao.coxa_esq_alta|default:"—" }}</td></tr>
+                  <tr><td>Baixa</td><td>{{ medicao.coxa_dir_baixa|default:"—" }}</td><td>{{ medicao.coxa_esq_baixa|default:"—" }}</td></tr>
+                </tbody>
+              </table>
+
+              <table class="mini-table">
+                <thead>
+                  <tr><th>Panturrilha</th><th>Direita</th><th>Esquerda</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>—</td><td>{{ medicao.panturrilha_dir|default:"—" }}</td><td>{{ medicao.panturrilha_esq|default:"—" }}</td></tr>
+                </tbody>
+              </table>
+
+              <div class="detalhe-simples">
+                <div><span class="l">Tórax</span><span class="v">{{ medicao.torax|default:"—" }} cm</span></div>
+                <div><span class="l">Abdômen</span><span class="v">{{ medicao.abdomen|default:"—" }} cm</span></div>
+                <div><span class="l">Quadril</span><span class="v">{{ medicao.quadril|default:"—" }} cm</span></div>
+                <div><span class="l">Gordura Visceral</span><span class="v">{{ medicao.gordura_visceral|default:"—" }}</span></div>
+                <div><span class="l">Metabolismo Basal</span><span class="v">{{ medicao.metabolismo_basal|default:"—" }} kcal</span></div>
+                <div><span class="l">Massa Magra</span><span class="v">{{ medicao.massa_magra|default:"—" }} kg</span></div>
+                <div><span class="l">Altura</span><span class="v">{{ medicao.altura|default:"—" }} cm</span></div>
+              </div>
+
+            </div>
+          </td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="7" style="text-align:center; color:var(--text-muted); padding:24px;">Nenhuma medição registrada ainda.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</main>
+
+{{ dados_grafico_json|json_script:"dados-grafico" }}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'metricas/js/metricas_evolucao.js' %}"></script>
+{% endblock %}

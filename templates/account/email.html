@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Gerenciar e-mail — ProgressoFit{% endblock %}
+
+{% block content %}
+<main style="max-width:760px; margin:48px auto; padding:0 24px;">
+  <section style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:28px;">
+    <h1>Gerenciar e-mail</h1>
+    <p style="color:var(--text-muted);">Os endereços associados à sua conta aparecem abaixo.</p>
+
+    {% if emailaddresses %}
+      <form method="post" action="{% url 'account_email' %}">
+        {% csrf_token %}
+        {% for radio in emailaddress_radios %}
+          {% with address=radio.emailaddress %}
+            <label for="{{ radio.id }}" style="display:flex; gap:12px; align-items:center; padding:14px 0; border-bottom:1px solid var(--border);">
+              <input type="radio" name="email" value="{{ address.email }}" id="{{ radio.id }}" {% if radio.checked %}checked{% endif %}>
+              <span>
+                <strong>{{ address.email }}</strong>
+                {% if address.primary %}<span> · Principal</span>{% endif %}
+                {% if address.verified %}
+                  <span> · Confirmado</span>
+                {% else %}
+                  <span> · Não confirmado</span>
+                {% endif %}
+              </span>
+            </label>
+          {% endwith %}
+        {% endfor %}
+
+        <div style="display:flex; flex-wrap:wrap; gap:10px; margin-top:18px;">
+          <button class="btn-outline" type="submit" name="action_primary">Definir como principal</button>
+          <button class="btn-outline" type="submit" name="action_send">Reenviar confirmação</button>
+          <button class="btn-outline" type="submit" name="action_remove">Remover endereço</button>
+        </div>
+      </form>
+    {% else %}
+      <p>Não há endereço de e-mail associado a esta conta.</p>
+    {% endif %}
+
+    {% if can_add_email %}
+      <h2 style="margin-top:32px;">Adicionar e-mail</h2>
+      <form method="post" action="{% url 'account_email' %}">
+        {% csrf_token %}
+        <label " for="{{ form.email.id_for_label }}">Novo endereço de e-mail</label>
+        {{ form.email }}
+        {% if form.email.errors %}
+          <p style="color:#E85C5C ;">{{ form.email.errors|striptags }}</p>
+        {% endif %}
+        <button class="btn-outline" type="submit" name="action_add" style="margin-top:12px;">Adicionar e-mail</button>
+      </form>
+    {% endif %}
+
+    <p style="margin-top:28px;"><a href="{% url 'contas:configuracoes_perfil' %}">Voltar às configurações</a></p>
+  </section>
+</main>
+{% endblock %}

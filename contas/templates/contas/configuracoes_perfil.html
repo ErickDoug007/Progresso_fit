@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Configurações — ProgressoFit{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'contas/css/configuracoes.css' %}">
+{% endblock %}
+
+{% block content %}
+
+
+<div class="settings-wrap">
+  <h1>Configurações</h1>
+
+  <div class="settings-grid">
+
+    <!-- Conta -->
+    <div class="settings-card">
+      <h3>Conta</h3>
+      <div class="settings-row">
+        <div>
+          <div class="row-title">Nome de usuário</div>
+          <div class="row-desc">{{ request.user.username }}</div>
+        </div>
+      </div>
+      <div class="settings-row">
+        <div>
+          <div class="row-title">E-mail</div>
+          <div class="row-desc">{{ email_conta|default:"E-mail não cadastrado" }}</div>
+        </div>
+      </div>
+      <div class="settings-row">
+        <a href="{% url 'contas:editar_perfil' %}" class="btn-outline">Editar perfil</a>
+        <a href="{% url 'account_email' %}" class="btn-outline">Gerenciar e-mail</a>
+        <a href="{% url 'account_change_password' %}" class="btn-outline">Alterar senha</a>
+      </div>
+    </div>
+
+    <!-- Aparência -->
+    <div class="settings-card">
+      <h3>Aparência</h3>
+      <div class="settings-row">
+        <div>
+          <div class="row-title">Tema</div>
+          <div class="row-desc">Escolha entre modo claro ou escuro</div>
+        </div>
+        <button type="button" id="themeToggleBtn" class="toggle-switch on">
+          <div class="knob"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Privacidade -->
+    <div class="settings-card">
+      <h3>Privacidade</h3>
+      <div class="settings-row">
+        <div>
+          <div class="row-title">Perfil privado</div>
+          <div class="row-desc">Só você vê suas métricas e progresso</div>
+        </div>
+        <button type="button" id="privacyToggleBtn" class="toggle-switch on">
+          <div class="knob"></div>
+        </button>
+      </div>
+    </div>
+
+    <!-- Profissional -->
+    <div class="settings-card">
+      <h3>Profissional</h3>
+      {% if perfil.profissao %}
+      <div class="settings-row">
+        <div>
+          <div class="row-title">{{ perfil.get_profissao_display }}</div>
+          <div class="row-desc">{% if perfil.profissional_verificado %}Verificado{% else %}Aguardando verificação{% endif %}</div>
+        </div>
+      </div>
+      {% endif %}
+      <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_div }}
+        <button type="submit" class="btn-outline">Enviar para verificação</button>
+      </form>
+    </div>
+
+    <!-- Suporte -->
+    <div class="settings-card">
+      <h3>Suporte</h3>
+      <div class="settings-row">
+        <a href="mailto:progressofit01@gmail.com" class="settings-link">Falar com o suporte</a>
+      </div>
+      <div class="settings-row">
+        <a href="#" class="settings-link">Perguntas frequentes</a>
+      </div>
+    </div>
+
+    <!-- Sair -->
+    <div class="settings-card danger">
+      <h3>Sessão</h3>
+      <form method="post" action="{% url 'account_logout' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn-danger">Sair da conta</button>
+      </form>
+    </div>
+
+  </div>
+
+  <a href="{% url 'contas:perfil' %}" class="back-link">← Voltar para o perfil</a>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'contas/js/configuracoes.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Editar perfil — ProgressoFit{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'contas/css/editar_perfil.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<div class="edit-wrap">
+  <div class="edit-header">
+    <h1>Editar perfil</h1>
+  </div>
+
+  <form method="post" enctype="multipart/form-data" action="{% url 'contas:editar_perfil' %}" class="edit-form">
+    {% csrf_token %}
+
+    <div class="photo-row">
+      <div class="avatar-preview" id="avatar-preview"
+           {% if request.user.perfil.foto_perfil %}style="background-image:url('{{ request.user.perfil.foto_perfil.url }}');"{% endif %}>
+        {% if not request.user.perfil.foto_perfil %}{{ request.user.username|first|upper }}{% endif %}
+      </div>
+      <div class="photo-actions">
+        <label for="foto" class="upload-btn">Alterar foto</label>
+        <input type="file" id="foto" name="foto_perfil" accept="image/*" onchange="previewFoto(event)">
+        <input type="hidden" id="remover_foto" name="remover_foto" value="false">
+        <button type="button" class="remove-btn" onclick="removerFoto()">Remover foto atual</button>
+        {{ form_perfil.foto_perfil.errors }}
+      </div>
+    </div>
+
+    <label for="nome_usuario">Nome de usuário</label>
+    <input type="text" id="nome_usuario" name="username"
+           value="{{ form_usuario.username.value|default:'' }}" required>
+    {{ form_usuario.username.errors }}
+
+    <label for="nome_completo">Nome </label>
+    <input type="text" id="nome_completo" name="first_name"
+           value="{{ form_usuario.first_name.value|default:'' }}" required>
+    {{ form_usuario.first_name.errors }}
+
+    <label for="descricao">Descrição</label>
+    <textarea id="descricao" name="descricao" maxlength="150"
+              oninput="atualizarContador(this)">{{ form_perfil.descricao.value|default:"" }}</textarea>
+    <div class="char-counter"><span id="contador">150</span>/150</div>
+    {{ form_perfil.descricao.errors }}
+
+    <div class="actions">
+      <a href="{% url 'contas:perfil' %}" class="btn-outline">Cancelar</a>
+      <button type="submit">Salvar alterações</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  function previewFoto(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      const preview = document.getElementById('avatar-preview');
+      preview.style.backgroundImage = `url(${e.target.result})`;
+      preview.textContent = '';
+    };
+    reader.readAsDataURL(file);
+    document.getElementById('remover_foto').value = 'false';
+  }
+
+  function removerFoto() {
+    const preview = document.getElementById('avatar-preview');
+    preview.style.backgroundImage = 'none';
+    preview.textContent = '{{ request.user.username|first|upper }}';
+    document.getElementById('foto').value = '';
+    document.getElementById('remover_foto').value = 'true';
+  }
+
+  function atualizarContador(el) {
+    const restante = 150 - el.value.length;
+    document.getElementById('contador').textContent = restante;
+  }
+
+  atualizarContador(document.getElementById('descricao'));
+</script>
+{% endblock %}

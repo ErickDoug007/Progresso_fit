@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Ranking — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'metricas/css/metricas.css' %}">{% endblock %}
+
+{% block content %}
+<header class="ranking-header">
+  <div><h1>Ranking <span>ProgressoFit</span></h1><p>Só perfis públicos e medidas aprovadas entram na disputa</p></div>
+</header>
+
+<main class="ranking-main">
+  <div class="tabs">
+    {% for valor, nome in categorias %}
+      <a href="?categoria={{ valor }}" class="tab-btn {% if valor == categoria_atual %}active{% endif %}">{{ nome }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="card ranking-table-card" style="padding:0;">
+    <table>
+      <thead><tr><th>#</th><th>Usuário</th><th>Medida</th><th>Foto Músculo</th><th>Data do envio</th></tr></thead>
+      <tbody>
+        {% for item in melhores %}
+        <tr>
+          <td>{{ forloop.counter }}º</td>
+          <td><a href="{% url 'contas:ver_perfil' item.usuario.username %}" style="color:var(--accent-2);">{{ item.usuario.username }}</a></td>
+          <td>{{ item.valor }} cm</td>
+          <td>
+            {% if item.foto_comprovante %}
+              <a href="{{ item.foto_comprovante.url }}" target="_blank" rel="noopener noreferrer">
+                <img src="{{ item.foto_comprovante.url }}" alt="Comprovante da medida de {{ item.usuario.username }}" loading="lazy" style="width:96px; height:72px; object-fit:cover; border-radius:6px;">
+              </a>
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td>{{ item.enviado_em|date:"d/m/Y" }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">Ainda não há registros verificados nessa categoria.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <a href="{% url 'metricas:enviar_ranking' %}" class="btn btn-primary" style="margin-top:24px; display:inline-block; text-decoration:none;">Enviar minha medida</a>
+</main>
+{% endblock %}

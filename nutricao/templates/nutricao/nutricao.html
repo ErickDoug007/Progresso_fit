@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Minha Dieta — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'nutricao/css/nutricao.css' %}">{% endblock %}
+{% block nav_dieta %}active{% endblock %}
+
+{% block content %}
+<div style="margin-left:80px">
+  <h1>Sua <span>alimentação</span></h1>
+  <p>Acompanhe o status do seu plano alimentar</p>
+</div>
+
+<main>
+  {% if messages %}
+    {% for message in messages %}
+      <div style="background:var(--surface); border-left:3px solid var(--accent); padding:14px 20px; margin-bottom:24px; border-radius:6px;">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="diet-card">
+    <div class="status status-{{ plano.status }}">
+      <span class="dot"></span> {{ plano.get_status_display }}
+    </div>
+
+    {% if plano.status == 'pendente' %}
+      <p>Sua ficha foi recebida. O plano alimentar gerado está aguardando revisão de um especialista antes de ficar disponível pra você.</p>
+    {% elif plano.status == 'aprovado' or plano.status == 'ajustado' %}
+      <p>Seu plano alimentar foi revisado e está liberado.</p>
+    {% elif plano.status == 'rejeitado' %}
+      <p>Seu plano precisou de ajustes. Preencha a ficha novamente com mais detalhes.</p>
+    {% endif %}
+
+        {% if plano.observacoes_especialista %}
+      <p style="margin-top:12px"><strong>Parecer do profissional:</strong> {{ plano.observacoes_especialista|linebreaksbr }}</p>
+    {% endif %}
+
+    {% if plano.especialista %}
+      <div class="specialist">Revisado por: {{ plano.especialista.first_name|default:plano.especialista.username }}</div>
+    {% endif %}
+  </div>
+
+  {% if plano.conteudo and plano.status == 'aprovado' or plano.conteudo and plano.status == 'ajustado' %}
+    <div class="section-title" style="margin-top:28px">Refeições sugeridas</div>
+    {% for refeicao, itens in plano.conteudo.items %}
+      <div class="exercise">
+        <div><div class="name">{{ refeicao }}</div><div class="muscle">{{ itens }}</div></div>
+      </div>
+    {% endfor %}
+  {% endif %}
+
+  <div class="save-bar">
+    <a href="{% url 'nutricao:formulario' %}" class="btn-outline" style="text-decoration:none;">Atualizar minha ficha</a>
+  </div>
+</main>
+{% endblock %}

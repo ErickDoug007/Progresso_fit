@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Painel profissional — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'profissionais/css/profissionais.css' %}">{% endblock %}
+
+{% block content %}
+<div class="pro-head">
+  <h1>Painel <span>profissional</span></h1>
+  <p>{{ profissao }} verificado(a). Os alunos veem apenas o resultado das suas revisões e respostas.</p>
+</div>
+
+<main class="pro-main">
+  {% if eh_nutricionista %}
+  <section class="card">
+    <h2>Planos alimentares para revisar <span class="count">{{ planos_pendentes|length }}</span></h2>
+    {% for plano in planos_pendentes %}
+      <div class="row">
+        <div>
+          <div class="name">{{ plano.usuario.username }}</div>
+          <div class="muted">Ficha de {{ plano.ficha.data_submissao|date:"d/m/Y" }}
+            {% if plano.conteudo %}· plano gerado pela IA{% else %}· IA ainda não gerou o plano{% endif %}</div>
+        </div>
+        <a class="btn-outline" href="{% url 'profissionais:revisar_plano' plano.pk %}">Revisar</a>
+      </div>
+    {% empty %}
+      <p class="muted">Nenhum plano aguardando revisão.</p>
+    {% endfor %}
+  </section>
+  {% endif %}
+
+  <section class="card">
+    <h2>Dúvidas dos alunos <span class="count">{{ duvidas_pendentes|length }}</span></h2>
+    {% for duvida in duvidas_pendentes %}
+      <div class="row">
+        <div>
+          <div class="name">{{ duvida.aluno.username }} <span class="muted">· {{ duvida.criada_em|date:"d/m/Y H:i" }}</span></div>
+          <div class="muted">{{ duvida.pergunta|truncatechars:120 }}</div>
+        </div>
+        <a class="btn-outline" href="{% url 'profissionais:responder_duvida' duvida.pk %}">Responder</a>
+      </div>
+    {% empty %}
+      <p class="muted">Nenhuma dúvida pendente.</p>
+    {% endfor %}
+  </section>
+
+  <section class="card">
+    <h2>Meu histórico recente</h2>
+    {% if eh_nutricionista %}
+      {% for plano in planos_revisados %}
+        <div class="row">
+          <div><div class="name">Plano de {{ plano.usuario.username }}</div></div>
+          <span class="status status-{{ plano.status }}"><span class="dot"></span>{{ plano.get_status_display }}</span>
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% for duvida in duvidas_respondidas %}
+      <div class="row">
+        <div>
+          <div class="name">Resposta para {{ duvida.aluno.username }}</div>
+          <div class="muted">{{ duvida.respondida_em|date:"d/m/Y H:i" }}</div>
+        </div>
+      </div>
+    {% empty %}
+      {% if not eh_nutricionista or not planos_revisados %}<p class="muted">Nada por aqui ainda.</p>{% endif %}
+    {% endfor %}
+  </section>
+</main>
+{% endblock %}

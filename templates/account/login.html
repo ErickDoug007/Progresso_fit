@@ -1,0 +1,73 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrar — ProgressoFit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/base/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="side">
+<div class="logo">
+    <a href="{% url 'core:index' %}">
+        Progresso<span>Fit</span>
+    </a>
+</div>
+    <div class="side-quote">
+      <h2>Seus dados. Seu treino. Sua evolução.</h2>
+      <p>Acompanhe métricas corporais e receba treinos ajustados ao seu nível, gerados a partir do seu próprio progresso.</p>
+    </div>
+    <div class="stat-row">
+      <div><div class="n">3</div><div class="l">Níveis de treino</div></div>
+      <div><div class="n">100%</div><div class="l">Dietas revisadas</div></div>
+    </div>
+  </div>
+
+  <div class="form-side">
+    <form method="post" action="{% url 'account_login' %}">
+      {% csrf_token %}
+      <h1>Entrar</h1>
+      <p class="sub">Acesse sua conta para ver seu treino e progresso.</p>
+
+      {% if form.non_field_errors %}
+        <p style="color:#E85C5C; font-size:0.85rem; margin-bottom:16px;">{{ form.non_field_errors|striptags }}</p>
+      {% endif %}
+
+      <label for="id_login">E-mail</label>
+      <input type="email" id="id_login" name="login" placeholder="seuemail@exemplo.com" value="{{ form.login.value|default:'' }}" required autofocus>
+      {% if form.login.errors %}
+        <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.login.errors|striptags }}</p>
+      {% endif %}
+
+      <label for="id_password">Senha</label>
+      <input type="password" id="id_password" name="password" placeholder="••••••••" required>
+      {% if form.password.errors %}
+        <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.password.errors|striptags }}</p>
+      {% endif %}
+
+      <div class="row-between">
+        <span class="remember">
+          <input type="checkbox" id="id_remember" name="remember" style="width:auto">
+          <label for="id_remember" style="margin:0;color:inherit">Lembrar de mim</label>
+        </span>
+        <a href="{% url 'account_reset_password' %}">Esqueci minha senha</a>
+      </div>
+
+      {{ redirect_field }}
+
+      <button type="submit">Entrar</button>
+
+      <p class="switch-text">Não tem conta? <a href="{% url 'account_signup' %}">Criar conta</a></p>
+    </form>
+  </div>
+</div>
+
+<script src="{% static 'js/envio-unico.js' %}" defer></script>
+</body>
+</html>

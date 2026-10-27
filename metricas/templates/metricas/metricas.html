@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Painel de Evolução Corporal — ProgressoFit{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'metricas/css/metricas.css' %}">
+{% endblock %}
+
+{% block content %}
+<header>
+  <div>
+    <h1>Painel de <span>Evolução</span> Corporal</h1>
+    <p>Acompanhe sua composição, medidas e progresso ao longo do tempo</p>
+  </div>
+</header>
+
+<div class="tabs">
+  <button type="button" class="tab-btn active" data-tab="composicao">Composição</button>
+  <button type="button" class="tab-btn" data-tab="superiores">Membros Superiores</button>
+  <button type="button" class="tab-btn" data-tab="tronco">Tronco / Cintura</button>
+  <button type="button" class="tab-btn" data-tab="inferiores">Membros Inferiores</button>
+</div>
+
+<form method="post" action="{% url 'metricas:metricas' %}">
+  {% csrf_token %}
+  <main>
+
+    <!-- COMPOSIÇÃO -->
+    <section class="panel active" id="composicao">
+      <div class="highlight-strip">
+        <div class="highlight"><div class="v" id="imcCard">--</div><div class="l">IMC</div></div>
+        <div class="highlight"><div class="v" id="massaMagraCard">--</div><div class="l">Massa Magra (kg)</div></div>
+        <div class="highlight"><div class="v" id="gorduraCard">--</div><div class="l">% Gordura</div></div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <h3>Nível</h3>
+          <div class="field"><label>{{ form.nivel.label }}</label>{{ form.nivel }}</div>
+        </div>
+        <div class="card">
+          <h3>Peso e Altura</h3>
+          <div class="row2">
+            <div class="field"><label>{{ form.peso.label }}</label>{{ form.peso }}</div>
+            <div class="field"><label>{{ form.altura.label }}</label>{{ form.altura }}</div>
+          </div>
+          <div class="field"><label>IMC (calculado)</label><input type="text" id="imc" readonly></div>
+        </div>
+        <div class="card">
+          <h3>Composição</h3>
+          <div class="field"><label>{{ form.percentual_gordura.label }}</label>{{ form.percentual_gordura }}</div>
+          <div class="field"><label>Massa Magra (kg) — calculado</label><input type="text" id="massaMagra" readonly></div>
+          <div class="field"><label>{{ form.gordura_visceral.label }}</label>{{ form.gordura_visceral }}</div>
+        </div>
+        <div class="card">
+          <h3>Metabolismo</h3>
+          <div class="field"><label>{{ form.metabolismo_basal.label }}</label>{{ form.metabolismo_basal }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMBROS SUPERIORES -->
+    <section class="panel" id="superiores">
+      <div class="grid">
+        <div class="card">
+          <h3>Braço Esquerdo</h3>
+          <div class="field"><label>{{ form.braco_esq_relaxado.label }}</label>{{ form.braco_esq_relaxado }}</div>
+          <div class="field"><label>{{ form.braco_esq_contraido.label }}</label>{{ form.braco_esq_contraido }}</div>
+        </div>
+        <div class="card">
+          <h3>Braço Direito</h3>
+          <div class="field"><label>{{ form.braco_dir_relaxado.label }}</label>{{ form.braco_dir_relaxado }}</div>
+          <div class="field"><label>{{ form.braco_dir_contraido.label }}</label>{{ form.braco_dir_contraido }}</div>
+        </div>
+        <div class="card">
+          <h3>Antebraço</h3>
+          <div class="field"><label>{{ form.antebraco_esq.label }}</label>{{ form.antebraco_esq }}</div>
+          <div class="field"><label>{{ form.antebraco_dir.label }}</label>{{ form.antebraco_dir }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRONCO / CINTURA -->
+    <section class="panel" id="tronco">
+      <div class="grid">
+        <div class="card">
+          <h3>Tórax / Peitoral</h3>
+          <div class="field"><label>{{ form.torax.label }}</label>{{ form.torax }}</div>
+        </div>
+        <div class="card">
+          <h3>Cintura e Abdômen</h3>
+          <div class="field"><label>{{ form.cintura.label }}</label>{{ form.cintura }}</div>
+          <div class="field"><label>{{ form.abdomen.label }}</label>{{ form.abdomen }}</div>
+        </div>
+        <div class="card">
+          <h3>Quadril</h3>
+          <div class="field"><label>{{ form.quadril.label }}</label>{{ form.quadril }}</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMBROS INFERIORES -->
+    <section class="panel" id="inferiores">
+      <div class="grid">
+        <div class="card">
+          <h3>Coxa Esquerda</h3>
+          <div class="field"><label>{{ form.coxa_esq_alta.label }}</label>{{ form.coxa_esq_alta }}</div>
+          <div class="field"><label>{{ form.coxa_esq_baixa.label }}</label>{{ form.coxa_esq_baixa }}</div>
+        </div>
+        <div class="card">
+          <h3>Coxa Direita</h3>
+          <div class="field"><label>{{ form.coxa_dir_alta.label }}</label>{{ form.coxa_dir_alta }}</div>
+          <div class="field"><label>{{ form.coxa_dir_baixa.label }}</label>{{ form.coxa_dir_baixa }}</div>
+        </div>
+        <div class="card">
+          <h3>Panturrilha</h3>
+          <div class="field"><label>{{ form.panturrilha_esq.label }}</label>{{ form.panturrilha_esq }}</div>
+          <div class="field"><label>{{ form.panturrilha_dir.label }}</label>{{ form.panturrilha_dir }}</div>
+        </div>
+      </div>
+    </section>
+
+    <div class="save-bar">
+      <a href='{% url "metricas:evolucao" %}' class="btn btn-outline" style="text-decoration: none;">
+        Cancelar
+      </a>
+      <button type="submit" class="btn btn-primary">Salvar medição</button>
+    </div>
+
+  </main>
+</form>
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'metricas/js/metricas.js' %}"></script>
+{% endblock %}

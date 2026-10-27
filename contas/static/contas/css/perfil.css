@@ -1,0 +1,198 @@
+/* ==========================================================
+   perfil.css — específico da página de perfil
+   ========================================================== */
+
+.profile-header {
+  display: flex;
+  gap: 56px;
+  padding: 48px 6vw 36px;
+  border-bottom: 1px solid var(--line);
+}
+
+.avatar-wrap { flex-shrink: 0; text-align: center; }
+.avatar-large {
+  width: 148px;
+  height: 148px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 2px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 2.6rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  position: relative;
+  cursor: pointer;
+}
+
+.avatar-hint { margin-top: 10px; font-size: 0.78rem; color: var(--text-muted); }
+
+.profile-main { flex: 1; }
+.profile-name-row { display: flex; align-items: center; gap: 18px; flex-wrap: wrap; }
+.profile-name-row h1 { font-family: var(--display); font-size: 1.8rem; font-weight: 600; }
+.btn-outline {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
+  padding: 8px 18px;
+  border-radius: 4px;
+  font-size: 0.88rem;
+  font-family: var(--body);
+  font-weight: 500;
+  cursor: pointer;
+}
+.btn-outline:hover { border-color: var(--text-muted); }
+
+.privacy-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-left: auto;
+}
+.toggle-switch {
+  position: relative;
+  width: 42px;
+  height: 24px;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.toggle-switch .knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: transform .15s, background .15s;
+}
+.toggle-switch.on { border-color: var(--accent-2); }
+.toggle-switch.on .knob { transform: translateX(18px); background: var(--accent-2); }
+
+.stats-row { display: flex; gap: 40px; margin-top: 22px; }
+.stats-row div { display: flex; gap: 6px; align-items: baseline; font-size: 0.95rem; }
+.stats-row .n { font-family: var(--display); font-weight: 700; font-size: 1.15rem; }
+.stats-row .l { color: var(--text-muted); }
+
+.bio { margin-top: 20px; max-width: 48ch; }
+.bio .display-name { font-weight: 600; }
+.bio .text { color: var(--text-muted); font-size: 0.92rem; margin-top: 4px; }
+.bio .meta { margin-top: 10px; display: flex; gap: 16px; font-size: 0.8rem; color: var(--text-muted); }
+.bio .meta .badge-lvl {
+  color: var(--accent-2);
+  border: 1px solid var(--accent-2);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+.metrics-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+.metrics-strip > div { padding: 28px 6vw; border-right: 1px solid var(--line); }
+.metrics-strip > div:last-child { border-right: none; }
+.metrics-strip .l { color: var(--text-muted); font-size: 0.8rem; margin-bottom: 8px; }
+.metrics-strip .v { font-family: var(--display); font-size: 1.7rem; font-weight: 600; }
+.metrics-strip .v.pos { color: var(--accent-2); }
+
+.grid-2 { display: grid; grid-template-columns: 1.4fr 1fr; }
+.col { padding: 6vw; border-right: 1px solid var(--line); }
+.col:last-child { border-right: none; }
+
+.section-title {
+  font-family: var(--display);
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.section-title .tag {
+  font-family: var(--body);
+  font-size: 0.75rem;
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.exercise { display: flex; justify-content: space-between; padding: 16px 0; border-top: 1px solid var(--line); }
+.exercise:last-child { border-bottom: 1px solid var(--line); }
+.exercise .name { font-weight: 500; }
+.exercise .muscle { color: var(--text-muted); font-size: 0.85rem; }
+.exercise .sets { font-family: var(--display); font-weight: 600; color: var(--text-muted); }
+
+.diet-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.diet-card .status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.8rem; color: var(--warn); margin-bottom: 12px; }
+.diet-card .status .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--warn); }
+.diet-card p { color: var(--text-muted); font-size: 0.9rem; }
+.diet-card .specialist { margin-top: 14px; font-size: 0.82rem; color: var(--text-muted); }
+
+.photos { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.photos .ph {
+  aspect-ratio: 3/4;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  display: flex;
+  align-items: flex-end;
+  padding: 10px;
+  font-size: 0.75rem;
+  color: var(--text-muted);
+}
+.add-photo {
+  margin-top: 14px;
+  width: 100%;
+  background: transparent;
+  border: 1px dashed var(--line);
+  color: var(--text-muted);
+  padding: 12px;
+  border-radius: 4px;
+  font-family: var(--body);
+  cursor: pointer;
+}
+.add-photo:hover { border-color: var(--accent); color: var(--text); }
+
+.avatar-hidden {
+  visibility: hidden;
+}
+
+.avatar-large {
+  overflow: hidden;      /* corta o que passar do círculo */
+}
+
+.avatar-large img {
+  width: 100%;           /* ocupa exatamente o tamanho do círculo */
+  height: 100%;
+  object-fit: cover;     /* preenche sem esticar a foto */
+  display: block;
+}
+
+/* status do plano alimentar (revisão do profissional) */
+.diet-card .status-aprovado, .diet-card .status-ajustado { color: var(--accent-2); }
+.diet-card .status-aprovado .dot, .diet-card .status-ajustado .dot { background: var(--accent-2); }
+.diet-card .status-rejeitado { color: #E85C5C; }
+.diet-card .status-rejeitado .dot { background: #E85C5C; }
+.muted-note { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 12px; }
+
+
+@media (max-width: 900px) {
+  .metrics-strip { grid-template-columns: repeat(2, 1fr); }
+  .grid-2 { grid-template-columns: 1fr; }
+  .col { border-right: none; border-bottom: 1px solid var(--line); }
+}

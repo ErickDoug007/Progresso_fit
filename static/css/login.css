@@ -1,0 +1,94 @@
+/* ==========================================================
+   login.css — específico da página de login
+   ========================================================== */
+
+.wrap {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+}
+
+.side {
+  background: var(--surface);
+  padding: 6vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  border-right: 1px solid var(--line);
+}
+
+.side-quote h2 {
+  font-family: var(--display);
+  font-weight: 600;
+  font-size: 2.4rem;
+  line-height: 1.1;
+  max-width: 14ch;
+}
+.side-quote p { margin-top: 18px; color: var(--text-muted); max-width: 40ch; }
+
+.stat-row { display: flex; gap: 40px; }
+.stat-row div .n { font-family: var(--display); font-size: 1.8rem; font-weight: 700; color: var(--accent-2); }
+.stat-row div .l { color: var(--text-muted); font-size: 0.85rem; }
+
+.form-side {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6vw;
+}
+form { width: 100%; max-width: 380px; }
+form h1 { font-family: var(--display); font-size: 2.2rem; font-weight: 600; margin-bottom: 8px; }
+form > p.sub { color: var(--text-muted); margin-bottom: 36px; font-size: 0.95rem; }
+
+label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  margin-top: 20px;
+}
+label:first-of-type { margin-top: 0; }
+input {
+  width: 100%;
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 13px 14px;
+  color: var(--text);
+  font-family: var(--body);
+  font-size: 0.98rem;
+}
+input:focus { outline: none; border-color: var(--accent); }
+
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 14px;
+  font-size: 0.85rem;
+}
+.row-between a { color: var(--accent-2); }
+.remember { display: flex; gap: 8px; align-items: center; color: var(--text-muted); }
+
+button[type="submit"] {
+  width: 100%;
+  margin-top: 32px;
+  background: var(--accent);
+  color: #14171A;
+  border: none;
+  padding: 15px;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: var(--body);
+  cursor: pointer;
+}
+button[type="submit"]:hover { opacity: 0.92; }
+
+.switch-text { margin-top: 28px; text-align: center; color: var(--text-muted); font-size: 0.9rem; }
+.switch-text a { color: var(--accent-2); font-weight: 500; }
+
+@media (max-width: 800px) {
+  .wrap { grid-template-columns: 1fr; }
+  .side { display: none; }
+}

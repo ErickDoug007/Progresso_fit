@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Hora de reavaliar — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'treinos/css/treinos.css' %}">{% endblock %}
+{% block header %}{% endblock %}
+
+{% block content %}
+<div class="center-wrap">
+  <h1>Já se passaram {{ ficha.dias_desde_submissao }} dias</h1>
+  <p class="sub">Pra manter seu treino evoluindo junto com você, recomendamos atualizar suas informações.</p>
+
+  <a href="{% url 'treinos:formulario' %}" class="btn-outline" style="display:block; background:var(--accent); color:#14171A; border:none; padding:14px; margin-bottom:12px; text-decoration:none;">Responder novamente</a>
+  <a href="{% url 'treinos:continuar_anterior' %}" class="btn-outline" style="display:block; padding:14px; text-decoration:none;">Continuar com o treino anterior</a>
+</div>
+{% endblock %}

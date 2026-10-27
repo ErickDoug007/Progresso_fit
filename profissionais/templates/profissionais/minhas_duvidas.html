@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Minhas dúvidas — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'profissionais/css/profissionais.css' %}">{% endblock %}
+
+{% block content %}
+<div class="pro-head">
+  <h1>Tire sua <span>dúvida</span></h1>
+  <p>Perguntas sobre treino vão para educadores físicos; sobre alimentação, para nutricionistas verificados.</p>
+</div>
+
+<main class="pro-main">
+  <section class="card">
+    <h2>Nova dúvida</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        <label for="{{ form.area.id_for_label }}">{{ form.area.label }}</label>
+        {{ form.area }}
+        {% for erro in form.area.errors %}<div class="field-error">{{ erro }}</div>{% endfor %}
+      </div>
+      <div class="field">
+        <label for="{{ form.pergunta.id_for_label }}">{{ form.pergunta.label }}</label>
+        {{ form.pergunta }}
+        {% for erro in form.pergunta.errors %}<div class="field-error">{{ erro }}</div>{% endfor %}
+      </div>
+      <div class="actions"><button type="submit" class="btn">Enviar dúvida</button></div>
+    </form>
+  </section>
+
+  <section class="card">
+    <h2>Minhas perguntas</h2>
+    {% for duvida in duvidas %}
+      <div class="qa">
+        <div class="muted">{{ duvida.criada_em|date:"d/m/Y H:i" }} · {{ duvida.get_area_display }}</div>
+        <p class="q">{{ duvida.pergunta|linebreaksbr }}</p>
+        {% if duvida.respondida %}
+          <div class="answer">
+            <div class="label">Resposta de
+              {{ duvida.respondida_por.first_name|default:duvida.respondida_por.username|default:"um profissional" }}
+              {% if duvida.respondida_por.perfil.profissao %}({{ duvida.respondida_por.perfil.get_profissao_display }}){% endif %}
+            </div>
+            <p>{{ duvida.resposta|linebreaksbr }}</p>
+          </div>
+        {% else %}
+          <span class="status status-pendente"><span class="dot"></span>Aguardando resposta</span>
+        {% endif %}
+      </div>
+    {% empty %}
+      <p class="muted">Você ainda não enviou nenhuma dúvida.</p>
+    {% endfor %}
+  </section>
+</main>
+{% endblock %}

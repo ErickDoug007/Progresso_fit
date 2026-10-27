@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Revisar plano alimentar — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'profissionais/css/profissionais.css' %}">{% endblock %}
+
+{% block content %}
+<div class="pro-head">
+  <h1>Revisar plano <span>alimentar</span></h1>
+  <p>Aluno: {{ plano.usuario.username }} · gerado em {{ plano.gerado_em|date:"d/m/Y" }}</p>
+</div>
+
+<main class="pro-main">
+  <section class="card">
+    <h2>Ficha enviada pelo aluno</h2>
+    <div class="block"><div class="label">Pode comer / evitar</div><p>{{ ficha.pode_comer|linebreaksbr }}</p></div>
+    <div class="block"><div class="label">Rotina atual</div><p>{{ ficha.rotina_atual|linebreaksbr }}</p></div>
+    {% if ficha.orcamento_alimentar %}
+      <div class="block"><div class="label">Orçamento mensal</div><p>R$ {{ ficha.orcamento_alimentar }}</p></div>
+    {% endif %}
+  </section>
+
+  <section class="card">
+    <h2>Plano sugerido pela IA</h2>
+    {% for refeicao, itens in refeicoes %}
+      <div class="row"><div><div class="name">{{ refeicao }}</div><div class="muted">{{ itens }}</div></div></div>
+    {% empty %}
+      <p class="warn">A IA ainda não gerou conteúdo para este plano. Não é possível aprovar; se preferir, rejeite com um parecer.</p>
+    {% endfor %}
+  </section>
+
+  <section class="card">
+    <h2>Sua decisão</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        {% for radio in form.acao %}
+          <label class="radio">{{ radio.tag }} {{ radio.choice_label }}</label>
+        {% endfor %}
+        {% for erro in form.acao.errors %}<div class="field-error">{{ erro }}</div>{% endfor %}
+      </div>
+      <div class="field">
+        <label for="{{ form.observacoes.id_for_label }}">{{ form.observacoes.label }}</label>
+        {{ form.observacoes }}
+        {% for erro in form.observacoes.errors %}<div class="field-error">{{ erro }}</div>{% endfor %}
+        <div class="muted">Obrigatório para "Aprovar com ajustes" e "Rejeitar". O aluno lê este texto.</div>
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn">Registrar revisão</button>
+        <a class="btn-outline" href="{% url 'profissionais:painel' %}">Voltar</a>
+      </div>
+    </form>
+  </section>
+</main>
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Responder dúvida — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'profissionais/css/profissionais.css' %}">{% endblock %}
+
+{% block content %}
+<div class="pro-head">
+  <h1>Responder <span>dúvida</span></h1>
+  <p>{{ duvida.aluno.username }} · {{ duvida.criada_em|date:"d/m/Y H:i" }} · {{ duvida.get_area_display }}</p>
+</div>
+
+<main class="pro-main">
+  <section class="card">
+    <h2>Pergunta</h2>
+    <p>{{ duvida.pergunta|linebreaksbr }}</p>
+  </section>
+
+  <section class="card">
+    <h2>Sua resposta</h2>
+    <form method="post">
+      {% csrf_token %}
+      <div class="field">
+        {{ form.resposta }}
+        {% for erro in form.resposta.errors %}<div class="field-error">{{ erro }}</div>{% endfor %}
+        <div class="muted">Oriente de forma geral. Em caso de dor, lesão ou condição de saúde, recomende avaliação presencial.</div>
+      </div>
+      <div class="actions">
+        <button type="submit" class="btn">Enviar resposta</button>
+        <a class="btn-outline" href="{% url 'profissionais:painel' %}">Voltar</a>
+      </div>
+    </form>
+  </section>
+</main>
+{% endblock %}

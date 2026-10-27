@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProgressoFit — Treino sob medida, guiado por dados</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/base/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+</head>
+<body>
+
+<header>
+    <div class="logo">Progresso<span>Fit</span></div>
+  <nav>
+    <a href="#como-funciona">Como funciona</a>
+    <a href="{% url 'account_login' %}">Entrar</a>
+    <a class="nav-cta" href="{% url 'account_signup' %}">Criar conta</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div>
+    <h1>Seu corpo gera os dados.<br>A IA gera o treino.</h1>
+    <p>Registre suas medidas, acompanhe sua evolução com fotos de progresso e receba um treino ajustado ao seu nível — de iniciante a avançado.</p>
+    <div class="hero-ctas">
+      <a href="{% url 'account_signup' %}" class="btn-primary">Começar agora</a>
+      <a href="{% url 'account_login' %}" class="btn-secondary">Já tenho conta</a>    </div>
+  </div>
+  <div class="hero-panel">
+    <div class="row"><span class="label">Braço</span><span class="value">36,2 cm</span></div>
+    <div class="row"><span class="label">Panturrilha</span><span class="value">39,8 cm</span></div>
+    <div class="row"><span class="label">% gordura</span><span class="value up">↓ 14,3%</span></div>
+    <div class="row"><span class="label">Nível atual</span><span class="value">Intermediário</span></div>
+  </div>
+</section>
+
+<section class="strip">
+  <div>
+    <div class="num">01</div>
+    <div class="desc">Registre peso, altura, medidas e fotos de progresso quando quiser.</div>
+  </div>
+  <div>
+    <div class="num">02</div>
+    <div class="desc">A IA analisa seu nível — iniciante, médio ou avançado — e monta seu treino.</div>
+  </div>
+  <div>
+    <div class="num">03</div>
+    <div class="desc">Planos alimentares sugeridos só valem depois de aprovados por um especialista.</div>
+  </div>
+</section>
+
+<section class="how" id="como-funciona">
+  <h2>Como funciona</h2>
+  <div class="steps">
+    <div class="step">
+      <h3>Métricas</h3>
+      <p>Acompanhe sua composição corporal ao longo do tempo com um histórico simples e visual.</p>
+    </div>
+    <div class="step">
+      <h3>Treino adaptativo</h3>
+      <p>Cada treino é gerado considerando seu nível atual, evoluindo conforme seus dados mudam.</p>
+    </div>
+    <div class="step">
+      <h3>Nutrição validada</h3>
+      <p>Sugestões de dieta passam por revisão de um profissional formado antes de chegar até você.</p>
+    </div>
+  </div>
+</section>
+
+<section class="safety">
+  <div class="tag">Responsabilidade</div>
+  <p><strong>Nenhum plano alimentar é liberado sem validação profissional.</strong> A IA gera uma sugestão inicial, mas ela só fica disponível para você depois de revisada e aprovada por um nutricionista ou profissional habilitado cadastrado na plataforma.</p>
+</section>
+
+<footer>
+  <span>ProgressoFit</span>
+  <span>Treino e nutrição orientados por dados</span>
+  <div class="footer-cols">
+    <div class="footer-col">
+      <h4>Suporte</h4>
+      <a href="#">Contato</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a href="#">Política de privacidade</a>
+      <br>
+      <a href="#">Avisos legais</a>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span>Copyright © 2026 ProgressoFit. Todos os direitos reservados.</span>
+  </div>
+</footer>
+
+</body>
+</html>

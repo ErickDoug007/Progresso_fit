@@ -1,0 +1,67 @@
+main { padding: 32px 5vw; }
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 18px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+}
+.card h3 {
+  font-family: var(--display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+.field label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.field input, .field textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: var(--body);
+}
+.field textarea { resize: vertical; min-height: 80px; }
+.field input:focus, .field textarea:focus { outline: none; border-color: var(--accent); }
+.field-error { color: #E85C5C; font-size: 0.8rem; margin-top: 4px; }
+
+.diet-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 24px;
+}
+.status { display: inline-flex; align-items: center; gap: 8px; font-size: 0.85rem; margin-bottom: 12px; }
+.status .dot { width: 8px; height: 8px; border-radius: 50%; }
+.status-pendente .dot { background: #E8B93D; }
+.status-pendente { color: #E8B93D; }
+.status-aprovado .dot, .status-ajustado .dot { background: var(--accent); }
+.status-aprovado, .status-ajustado { color: var(--accent); }
+.status-rejeitado .dot { background: #E85C5C; }
+.status-rejeitado { color: #E85C5C; }
+.specialist { margin-top: 14px; font-size: 0.82rem; color: var(--text-muted); }
+
+.section-title { font-family: var(--display); font-size: 1.4rem; font-weight: 600; margin-bottom: 16px; }
+.exercise { display: flex; justify-content: space-between; padding: 14px 0; border-top: 1px solid var(--line); }
+.exercise:last-child { border-bottom: 1px solid var(--line); }
+.exercise .name { font-weight: 500; }
+.exercise .muscle { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; }
+
+.save-bar { margin-top: 28px; display: flex; justify-content: flex-end; gap: 12px; }
+.btn { padding: 13px 28px; border-radius: 6px; font-weight: 700; font-size: 0.95rem; cursor: pointer; border: none; font-family: var(--body); }
+.btn-primary { background: var(--accent); color: #14171A; }
+.btn-primary:hover { opacity: 0.9; }

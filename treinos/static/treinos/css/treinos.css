@@ -1,0 +1,174 @@
+/* ==========================================================
+   treinos.css — autossuficiente, usa só as variáveis do base.css
+   ========================================================== */
+
+main {
+  padding: 32px 5vw;
+}
+
+.form-title {
+  font-family: var(--display);
+}
+
+/* Grade de cards do formulário */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 20px;
+}
+.card h3 {
+  font-family: var(--display);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+}
+
+/* Campos de formulário */
+.field { margin-bottom: 14px; }
+.field:last-child { margin-bottom: 0; }
+.field label {
+  display: block;
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-family: var(--body);
+}
+.field textarea { resize: vertical; min-height: 70px; }
+.field input:focus,
+.field select:focus,
+.field textarea:focus { outline: none; border-color: var(--accent); }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+/* Lista de dias da semana (checkboxes) */
+.dias-checkbox ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+}
+.dias-checkbox li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dias-checkbox input {
+  width: auto;
+  accent-color: var(--accent);
+}
+.dias-checkbox label {
+  color: var(--text);
+  font-size: 0.92rem;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Indicadores de destaque (usados na tela do plano gerado) */
+.highlight-strip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 14px;
+  margin-bottom: 24px;
+}
+.highlight {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 18px;
+  text-align: center;
+}
+.highlight .v {
+  font-family: var(--display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--accent);
+}
+.highlight .l {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Lista de exercícios por dia */
+.section-title {
+  font-family: var(--display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+.exercise {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.exercise:last-child { border-bottom: 1px solid var(--line); }
+.exercise .name { font-weight: 500; }
+.exercise .muscle { color: var(--text-muted); font-size: 0.85rem; margin-top: 2px; }
+.exercise .sets { font-family: var(--display); font-weight: 600; color: var(--accent); }
+
+/* Barra de ações (salvar/cancelar) */
+.save-bar {
+  margin-top: 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.btn {
+  padding: 13px 28px;
+  border-radius: 6px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border: none;
+  font-family: var(--body);
+}
+.btn-primary { background: var(--accent); color: #14171A; }
+.btn-primary:hover { opacity: 0.9; }
+
+@media (max-width: 800px) {
+  .row2 { grid-template-columns: 1fr; }
+}
+
+/* Tela de reavaliação (centralizada) */
+.center-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 8vw 6vw;
+  text-align: center;
+}
+.center-wrap h1 {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+.center-wrap .sub {
+  color: var(--text-muted);
+  margin-top: 10px;
+  margin-bottom: 40px;
+}

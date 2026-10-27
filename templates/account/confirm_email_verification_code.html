@@ -1,0 +1,54 @@
+{% load static %}
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Verificar e-mail — ProgressoFit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/base/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/reset_done.css' %}">
+
+</head>
+<body>
+
+<div class="center-wrap">
+  <div class="logo" style="justify-content:center; display:flex; margin-bottom:32px;">Progresso<span>Fit</span></div>
+
+  <h1>Digite o código de verificação</h1>
+  <p class="sub">
+    Enviamos um código para <a href="mailto:{{ email }}" style="color:var(--accent-2);">{{ email }}</a>. Digite abaixo para confirmar seu e-mail.
+  </p>
+
+  {% url 'account_email_verification_sent' as action_url %}
+  <form method="post" action="{{ action_url }}" class="verify-form" style="text-align:left;">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <p style="color:#E85C5C; font-size:0.85rem; margin-bottom:16px;">{{ form.non_field_errors|striptags }}</p>
+    {% endif %}
+
+    <label for="id_code">Código de verificação</label>
+    <input type="text" id="id_code" name="code" placeholder="000000" maxlength="6" inputmode="numeric" autofocus required
+           style="text-align:center; letter-spacing:0.4em; font-family:var(--display); font-size:1.4rem;">
+    {% if form.code.errors %}
+      <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.code.errors|striptags }}</p>
+    {% endif %}
+
+    {{ redirect_field }}
+
+    <button type="submit" style="margin-top:24px; background:var(--accent); color:#14171A; border:none; padding:14px; border-radius:3px; font-weight:600; font-family:var(--body); cursor:pointer;">
+      Verificar
+    </button>
+  </form>
+
+  <p class="switch-text" style="margin-top:24px; text-align:center;">
+    E-mail errado? <a href="{% url 'account_email' %}" style="color:var(--accent-2);">Usar outro endereço</a>
+  </p>
+</div>
+
+<script src="{% static 'js/envio-unico.js' %}" defer></script>
+</body>
+</html>

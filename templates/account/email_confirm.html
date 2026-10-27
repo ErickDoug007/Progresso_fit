@@ -1,0 +1,55 @@
+{% load static %}
+{% load i18n %}
+{% load account %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Confirmar e-mail — ProgressoFit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/base/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/reset_done.css' %}">
+</head>
+<body>
+
+<div class="center-wrap">
+  <div class="logo" style="justify-content:center; display:flex; margin-bottom:32px;">Progresso<span>Fit</span></div>
+
+  <h1>Confirmar endereço de e-mail</h1>
+
+  {% if confirmation %}
+    {% user_display confirmation.email_address.user as user_display %}
+
+    {% if can_confirm %}
+      <p class="sub">
+        Confirme que <a href="mailto:{{ confirmation.email_address.email }}" style="color:var(--accent-2);">{{ confirmation.email_address.email }}</a> é o e-mail do usuário <strong style="color:var(--text);">{{ user_display }}</strong>.
+      </p>
+
+      {% url 'account_confirm_email' confirmation.key as action_url %}
+      <form method="post" action="{{ action_url }}">
+        {% csrf_token %}
+        {{ redirect_field }}
+        <button type="submit" class="btn-outline" style="background:var(--accent); color:#14171A; border:none; padding:14px 28px; font-weight:600; cursor:pointer;">
+          Confirmar
+        </button>
+      </form>
+    {% else %}
+      <p class="sub">
+        Não foi possível confirmar <strong style="color:var(--text);">{{ confirmation.email_address.email }}</strong> porque já foi confirmado por outra conta.
+      </p>
+      <a href="{% url 'account_login' %}" class="btn-outline" style="display:inline-block; margin-top:16px; padding:12px 24px;">Voltar para o login</a>
+    {% endif %}
+
+  {% else %}
+    {% url 'account_email' as email_url %}
+    <p class="sub">
+      Esse link de confirmação expirou ou é inválido. <a href="{{ email_url }}" style="color:var(--accent-2);">Solicite um novo link de confirmação</a>.
+    </p>
+  {% endif %}
+</div>
+
+<script src="{% static 'js/envio-unico.js' %}" defer></script>
+</body>
+</html>

@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Enviar medida — Ranking ProgressoFit{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'metricas/css/metricas.css' %}">
+{% endblock %}
+
+{% block content %}
+<header>
+  <div>
+    <h1>Enviar <span>medida</span> para o ranking</h1>
+    <p>Sua medida só entra no ranking depois de verificada e com o perfil público</p>
+  </div>
+</header>
+
+<main>
+
+  <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+      <div style="background:#3a1a1a; border-left:3px solid #E85C5C; padding:14px 20px; margin-bottom:20px; border-radius:6px;">
+        {{ form.non_field_errors }}
+      </div>
+    {% endif %}
+
+    <div class="grid">
+      <div class="card">
+        <h3>Categoria</h3>
+        <div class="field">
+          <label>{{ form.categoria.label }}</label>
+          {{ form.categoria }}
+          {% if form.categoria.errors %}
+            <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.categoria.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Medida</h3>
+        <div class="field">
+          <label>{{ form.valor.label }}</label>
+          {{ form.valor }}
+          {% if form.valor.errors %}
+            <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.valor.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Comprovação</h3>
+        <div class="field">
+          <label>{{ form.foto_comprovante.label }}</label>
+          {{ form.foto_comprovante }}
+          {% if form.foto_comprovante.errors %}
+            <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.foto_comprovante.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="save-bar">
+      <a href="{% url 'metricas:ranking' %}" class="btn btn-outline" style="text-decoration:none;">Cancelar</a>
+      <button type="submit" class="btn btn-primary">Enviar para verificação</button>
+    </div>
+  </form>
+
+</main>
+{% endblock %}

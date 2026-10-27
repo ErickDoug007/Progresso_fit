@@ -1,0 +1,30 @@
+# Copie este arquivo para ".env" (na raiz do projeto) e preencha. NUNCA envie o .env para o Git.
+
+# Gere uma chave nova e única (mínimo 50 caracteres):
+# python -c "from django.core.management.utils import get_random_secret_key as g; print(g())"
+SECRET_KEY=troque-por-uma-chave-gerada
+
+# Em produção use SEMPRE False
+DEBUG=False
+
+# Domínios do site, separados por vírgula (sem https://)
+ALLOWED_HOSTS=127.0.0.1,localhost
+
+# Em produção (HTTPS): origens completas autorizadas a enviar formulários
+# CSRF_TRUSTED_ORIGINS=https://meusite.com.br
+
+# Caminho do painel admin — troque por algo não óbvio; precisa terminar com "/"
+# ADMIN_URL=painel-troque-isto/
+
+# Produção atrás de proxy reverso que termina o HTTPS (e sobrescreve X-Forwarded-Proto)
+# TRUST_PROXY_SSL_HEADER=True
+# FORCE_HTTPS=True
+# HSTS_SECONDS=2592000
+
+# E-mail (senha de aplicativo do Gmail; veja EMAIL_SETUP.md)
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
+
+# IA de treino (Google Gemini)
+GEMINI_API_KEY=
+GEMINI_MODEL=

@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% block title %}ProgressoFit{% endblock %}</title>
+<script src="{% static 'js/theme.js' %}"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/base/base.css' %}">
+{% block extra_css %}{% endblock %}
+</head>
+<body>
+
+{% block header %}
+<header>
+  <div class="logo">Progresso<span>Fit</span></div>
+  <nav>
+    <a href="{% url 'contas:perfil' %}" class="{% block nav_perfil %}{% endblock %}">Perfil</a>
+    <a href="{% url 'treinos:treino' %}" class="{% block nav_treino %}{% endblock %}">Treino</a>
+    <a href="{% url 'nutricao:nutricao' %}" class="{% block nav_dieta %}{% endblock %}">Dieta</a>
+    <a href="{% url 'metricas:ranking' %}">Ranking</a>
+
+    {% with p=request.user.perfil %}{% if p.profissional_verificado %}{% if p.profissao == 'personal' or p.profissao == 'nutricionista' %}
+    <a href="{% url 'profissionais:painel' %}">Painel</a>
+    {% endif %}{% endif %}{% endwith %}
+    
+  </nav>
+  {% block header_avatar %}
+  <a href="{% url 'contas:configuracoes_perfil' %}" class="avatar">{{ request.user.username|first|upper }}</a>
+  {% endblock %}
+</header>
+{% endblock %}
+
+{% if messages %}
+<div style="max-width:1100px; margin:16px auto 0; padding:0 24px;">
+  {% for message in messages %}
+  <div style="background:var(--surface); border-left:3px solid {% if message.tags == 'error' %}#E85C5C{% else %}var(--accent){% endif %}; padding:14px 20px; margin-bottom:12px; border-radius:6px;">{{ message }}</div>
+  {% endfor %}
+</div>
+{% endif %}
+
+{% block content %}{% endblock %}
+
+{% block extra_js %}{% endblock %}
+<script src="{% static 'js/envio-unico.js' %}" defer></script>
+</body>
+</html>

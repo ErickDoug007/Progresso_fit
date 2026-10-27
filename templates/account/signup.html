@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Criar conta — ProgressoFit</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/base/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/cadastro.css' %}">
+</head>
+<body>
+
+<div class="wrap">
+  <div class="side">
+    <div class="logo">
+      <a href="{% url 'core:index' %}">Progresso<span>Fit</span></a>
+    </div>
+
+    <div class="levels">
+      <div class="lvl"><span class="name">Iniciante</span><span class="desc">Primeiros passos na musculação</span></div>
+      <div class="lvl"><span class="name">Intermediário</span><span class="desc">Já domina os movimentos básicos</span></div>
+      <div class="lvl"><span class="name">Avançado</span><span class="desc">Foco em performance e ajuste fino</span></div>
+    </div>
+    <div></div>
+  </div>
+
+  <div class="form-side">
+    <form method="post" action="{% url 'account_signup' %}">
+      {% csrf_token %}
+      <h1>Criar conta</h1>
+      <p class="sub">Leva menos de um minuto.</p>
+
+      {% if form.non_field_errors %}
+        <p style="color:#E85C5C; font-size:0.85rem; margin-bottom:16px;">{{ form.non_field_errors|striptags }}</p>
+      {% endif %}
+
+      <label for="id_first_name">Nome completo</label>
+      <input type="text" id="id_first_name" name="first_name" placeholder="Seu nome" value="{{ form.first_name.value|default:'' }}" required>
+      {% if form.first_name.errors %}
+        <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.first_name.errors|striptags }}</p>
+      {% endif %}
+
+  
+      <label for="id_email">E-mail</label>
+      <input type="email" id="id_email" name="email" placeholder="seuemail@exemplo.com" value="{{ form.email.value|default:'' }}" required>
+      {% if form.email.errors %}
+        <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.email.errors|striptags }}</p>
+      {% endif %}
+
+      <div class="field-row">
+        <div>
+          <label for="id_password1">Senha</label>
+          <input type="password" id="id_password1" name="password1" placeholder="••••••••" required>
+          {% if form.password1.errors %}
+            <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.password1.errors|striptags }}</p>
+          {% endif %}
+        </div>
+        <div>
+          <label for="id_password2">Confirmar senha</label>
+          <input type="password" id="id_password2" name="password2" placeholder="••••••••" required>
+          {% if form.password2.errors %}
+            <p style="color:#E85C5C; font-size:0.8rem; margin-top:4px;">{{ form.password2.errors|striptags }}</p>
+          {% endif %}
+        </div>
+      </div>
+
+      {{ redirect_field }}
+
+      <button type="submit">Criar minha conta</button>
+      <p class="terms">Ao criar uma conta, você concorda que sugestões de treino e dieta são geradas por IA e que planos alimentares só valem após aprovação de um profissional.</p>
+
+      <p class="switch-text">Já tem conta? <a href="{% url 'account_login' %}">Entrar</a></p>
+    </form>
+  </div>
+</div>
+
+<script src="{% static 'js/envio-unico.js' %}" defer></script>
+</body>
+</html>

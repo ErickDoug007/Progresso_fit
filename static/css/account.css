@@ -1,0 +1,76 @@
+.center-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 8vw 6vw;
+  text-align: center;
+}
+
+.step-indicator {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.center-wrap h1 {
+  font-family: var(--display);
+  font-size: 2.2rem;
+  font-weight: 600;
+}
+
+.center-wrap .sub {
+  color: var(--text-muted);
+  margin-top: 10px;
+  margin-bottom: 40px;
+}
+
+.type-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.type-card { display: block; cursor: pointer; }
+.type-card input { display: none; }
+
+.type-card-inner {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 28px;
+  text-align: left;
+  transition: border-color .15s, background .15s;
+}
+
+.type-icon { font-size: 1.8rem; margin-bottom: 10px; }
+
+.type-card-inner h2 {
+  font-family: var(--display);
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.type-card-inner p {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.type-card input:checked + .type-card-inner {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.type-form button[type="submit"] {
+  margin-top: 12px;
+  background: var(--accent);
+  color: #14171A;
+  border: none;
+  padding: 15px;
+  border-radius: 3px;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: var(--body);
+  cursor: pointer;
+}
+.type-form button[type="submit"]:hover { opacity: 0.92; }

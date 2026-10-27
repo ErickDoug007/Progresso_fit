@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ usuario_alvo.username }} — ProgressoFit{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'contas/css/perfil.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<section class="profile-header">
+  <div class="avatar-wrap">
+    <div class="avatar-large">
+      {% if perfil.foto_perfil %}
+        <img src="{{ perfil.foto_perfil.url }}" alt="Foto de perfil">
+      {% else %}
+        {{ usuario_alvo.username|first|upper }}
+      {% endif %}
+    </div>
+    {% if eh_dono %}
+      <a href="{% url 'metricas:evolucao' %}" class="btn-outline" style="display:block; margin-top:12px; text-align:center; font-size:0.8rem; padding:8px 14px;">
+        Ver Medidas
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="profile-main">
+    <div class="profile-name-row">
+      <h1>{{ usuario_alvo.username }}</h1>
+
+      {% if eh_dono %}
+        <a class="btn-outline" href="{% url 'contas:editar_perfil' %}">Editar perfil</a>
+        <div class="privacy-toggle">
+          <span id="privacy-label">{{ perfil.publico|yesno:"Perfil público,Perfil privado" }}</span>
+          <div class="toggle-switch{% if not perfil.publico %} on{% endif %}"
+               id="privacy-switch"
+               data-url="{% url 'contas:alternar_privacidade' %}">
+            <div class="knob"></div>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+
+    <!-- Sempre visíveis, mesmo com perfil privado -->
+    <div class="stats-row">
+      <div><span class="n">{{ usuario_alvo.fotos_treino.count }}</span><span class="l">fotos de progresso</span></div>
+      <div><span class="n">{{ qtd_treinos_concluidos }}</span><span class="l">treinos concluídos</span></div>
+      <div><span class="n">{{ numero_tempo }}</span><span class="l">{{ texto_tempo }}</span></div>
+    </div>
+
+    <div class="bio">
+      <div class="display-name">{% if pode_ver_completo %}{{ usuario_alvo.first_name }} {{ usuario_alvo.last_name }}{% endif %}</div>
+      <div class="text">{% if pode_ver_completo %}{{ perfil.descricao|default:"Sem descrição." }}{% else %}Perfil privado.{% endif %}</div>
+      <div class="meta">
+        <span class="badge-lvl">Nível: {{ nivel|default:"Não definido" }}</span>
+        {% if perfil.profissional_verificado %}<span class="badge-lvl">{{ perfil.get_profissao_display }} verificado</span>{% endif %}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if pode_ver_completo %}
+
+  <section class="metrics-strip">
+    <div><div class="l">Peso</div><div class="v">{{ usuario_alvo.metricas.first.peso|default:"-" }} kg</div></div>
+    <div><div class="l">Altura</div><div class="v">{{ usuario_alvo.metricas.first.altura|default:"-" }} cm</div></div>
+    <div><div class="l">Braço</div><div class="v">{{ usuario_alvo.metricas.first.braco_dir_contraido|default:"-" }} cm</div></div>
+    <div><div class="l">Antebraço</div><div class="v">{{ usuario_alvo.metricas.first.antebraco_dir|default:"-" }} cm</div></div>
+    <div><div class="l">Gordura%</div><div class="v pos">{{ usuario_alvo.metricas.first.percentual_gordura|default:"-" }}%</div></div>
+  </section>
+
+    <section class="grid-2">
+    <div class="col">
+      <div class="section-title">
+        {% if treino_hoje and not treino_hoje.hoje %}Próximo treino{% else %}Treino de hoje{% endif %}
+        <span class="tag">Gerado por IA</span>
+      </div>
+
+      {% if treino_hoje %}
+        {% if not treino_hoje.hoje %}
+          <p class="muted-note">Hoje é dia de descanso. Próximo treino: <strong>{{ treino_hoje.dia }}</strong>.</p>
+        {% endif %}
+        {% for ex in treino_hoje.exercicios %}
+          <div class="exercise">
+            <div>
+              <div class="name">{{ ex.exercicio }}</div>
+              <div class="muscle">
+                {% if ex.descanso %}Descanso {{ ex.descanso }}{% endif %}{% if ex.descanso and ex.carga_sugerida %} · {% endif %}{% if ex.carga_sugerida %}Carga {{ ex.carga_sugerida }}{% endif %}
+              </div>
+            </div>
+            <div class="sets">{{ ex.series }}x{{ ex.repeticoes }}</div>
+          </div>
+        {% endfor %}
+        {% if eh_dono %}
+          <a href="{% url 'treinos:treino' %}" class="btn-outline" style="display:inline-block; margin-top:14px;">Ver treino completo</a>
+        {% endif %}
+      {% else %}
+        <div class="exercise"><div><div class="name">Nenhum treino gerado ainda</div></div></div>
+        {% if eh_dono %}
+          <a href="{% url 'treinos:formulario' %}" class="btn-outline" style="display:inline-block; margin-top:14px;">Criar meu treino</a>
+        {% endif %}
+      {% endif %}
+
+      {% if eh_dono %}
+        <div class="section-title" style="margin-top:40px">Fotos de progresso</div>
+        <div class="photos">
+          {% for foto in usuario_alvo.fotos_treino.all|slice:":6" %}
+            <div class="ph" style="background:url('{{ foto.imagem.url }}') center/cover; padding:0" title="{{ foto.enviada_em|date:'d/m/Y' }}"></div>
+          {% endfor %}
+        </div>
+        <form method="post" action="{% url 'treinos:enviar_foto' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+          <label class="add-photo" style="display:block; text-align:center; cursor:pointer">
+            + Adicionar nova foto
+            <input type="file" name="imagem" accept="image/*" hidden onchange="this.form.submit()">
+          </label>
+        </form>
+      {% endif %}
+    </div>
+
+    <div class="col">
+      {% if eh_dono %}
+        <div class="section-title">Plano alimentar</div>
+        <div class="diet-card">
+          {% if plano_alimentar %}
+            <div class="status status-{{ plano_alimentar.status }}"><span class="dot"></span> {{ plano_alimentar.get_status_display }}</div>
+            {% if plano_alimentar.status == 'pendente' %}
+              <p>Seu plano está aguardando a revisão de um nutricionista. Ele só fica disponível depois de revisado.</p>
+            {% elif plano_alimentar.status == 'rejeitado' %}
+              <p>O plano precisou de ajustes. Atualize sua ficha com mais detalhes.</p>
+            {% else %}
+              <p>Plano revisado e liberado. <a href="{% url 'nutricao:nutricao' %}" style="color:var(--accent)">Ver plano</a></p>
+            {% endif %}
+            {% if plano_alimentar.observacoes_especialista %}
+              <p style="margin-top:10px"><strong>Parecer:</strong> {{ plano_alimentar.observacoes_especialista }}</p>
+            {% endif %}
+            {% if plano_alimentar.especialista %}
+              <div class="specialist">Revisado por: {{ plano_alimentar.especialista.first_name|default:plano_alimentar.especialista.username }}</div>
+            {% endif %}
+          {% else %}
+            <p>Você ainda não preencheu a ficha nutricional.</p>
+            <div class="specialist"><a href="{% url 'nutricao:formulario' %}" style="color:var(--accent)">Preencher agora</a></div>
+          {% endif %}
+        </div>
+        <a href="{% url 'profissionais:minhas_duvidas' %}" class="btn-outline" style="display:inline-block; margin-bottom:8px;">Tirar dúvida com um profissional</a>
+      {% endif %}
+
+      <div class="section-title" style="margin-top:32px">Histórico de métricas</div>
+      {% for medicao in historico %}
+        <div class="exercise"><div><div class="name">{{ medicao.data_medicao|date:"M/Y" }}</div></div><div class="sets">{{ medicao.peso }} kg</div></div>
+      {% empty %}
+        <div class="exercise"><div><div class="name">Nenhum histórico ainda</div></div></div>
+      {% endfor %}
+    </div>
+  </section>
+
+{% else %}
+
+  <section class="private-notice">
+    <p style="  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 80px;
+  margin-right: auto;">Este perfil é privado.</p>
+  </section>
+
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if eh_dono %}
+<script>
+  const sw = document.getElementById('privacy-switch');
+  const label = document.getElementById('privacy-label');
+
+  sw.addEventListener('click', () => {
+    fetch(sw.dataset.url, {
+      method: 'POST',
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}',
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(r => r.json())
+      .then(data => {
+        sw.classList.toggle('on', !data.publico);
+        label.textContent = data.publico ? 'Perfil público' : 'Perfil privado';
+      })
+      .catch(() => alert('Não foi possível atualizar a privacidade agora.'));
+  });
+</script>
+{% endif %}
+{% endblock %}

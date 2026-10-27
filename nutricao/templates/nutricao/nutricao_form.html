@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Minha ficha alimentar — ProgressoFit{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'nutricao/css/nutricao.css' %}">{% endblock %}
+{% block nav_dieta %}active{% endblock %}
+
+{% block content %}
+<div style="margin-left:80px">
+  <h1>Conte sobre <span>sua alimentação</span></h1>
+  <p>Isso ajuda a IA a montar um plano alimentar realista pra você</p>
+</div>
+
+<main>
+  {% if messages %}
+    {% for message in messages %}
+      <div style="background:var(--surface); border-left:3px solid #E85C5C; padding:14px 20px; margin-bottom:24px; border-radius:6px;">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid">
+      <div class="card">
+        <h3>O que você pode comer</h3>
+        <div class="field">
+          <label>{{ form.pode_comer.label }}</label>
+          {{ form.pode_comer }}
+          {% if form.pode_comer.errors %}<p class="field-error">{{ form.pode_comer.errors|striptags }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Rotina atual</h3>
+        <div class="field">
+          <label>{{ form.rotina_atual.label }}</label>
+          {{ form.rotina_atual }}
+          {% if form.rotina_atual.errors %}<p class="field-error">{{ form.rotina_atual.errors|striptags }}</p>{% endif %}
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Orçamento</h3>
+        <div class="field">
+          <label>{{ form.orcamento_alimentar.label }}</label>
+          {{ form.orcamento_alimentar }}
+          {% if form.orcamento_alimentar.errors %}<p class="field-error">{{ form.orcamento_alimentar.errors|striptags }}</p>{% endif %}
+        </div>
+      </div>
+    </div>
+
+    <div class="save-bar">
+      <button type="submit" class="btn btn-primary">Enviar ficha</button>
+    </div>
+  </form>
+</main>
+{% endblock %}
